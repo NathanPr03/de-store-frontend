@@ -5,8 +5,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 import {FormsModule} from "@angular/forms";
 import {MatOption} from "@angular/material/core";
-import {CurrencyPipe, NgForOf} from "@angular/common";
-import {MatIconButton} from "@angular/material/button";
+import {CommonModule, CurrencyPipe, NgForOf} from "@angular/common";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {
   MatCell,
@@ -20,9 +20,12 @@ import {
 import {MatSort} from "@angular/material/sort";
 import {MatCard} from "@angular/material/card";
 import {MatSelect} from "@angular/material/select";
+import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.component";
 
 @Component({
   imports: [
+    CommonModule,
     MatIcon,
     MatMenu,
     MatMenuTrigger,
@@ -62,7 +65,15 @@ import {MatSelect} from "@angular/material/select";
     MatCellDef,
     MatCard,
     MatSelect,
-    CurrencyPipe
+    CurrencyPipe,
+    MatDialogActions,
+    MatDialogContent,
+    MatDialogTitle,
+    MatButton,
+    MatButton,
+    MatButton,
+    MatDialogClose,
+    DiscountDialogComponent
   ],
   selector: 'app-product-list',
   standalone: true,
@@ -71,9 +82,9 @@ import {MatSelect} from "@angular/material/select";
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  offers: string[] = ['None', '3 for 2', 'Buy One Get One Free', 'Free Delivery'];
+  availableDiscounts: string[] = ['None', '3 for 2', 'Buy One Get One Free', 'Free Delivery'];
 
-  constructor(private productService: ProductService, private snackBar: MatSnackBar) {}
+  constructor(private productService: ProductService, private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -82,7 +93,9 @@ export class ProductListComponent implements OnInit {
   fetchProducts(): void {
     this.productService.getProducts().subscribe(
       (data: Product[]) => {
-        this.products = data
+        // Initialize showDiscountDropdown for each product
+        this.products = data.map(product => ({ ...product, showDiscountDropdown: false }));
+        console.log('Fetched products:', this.products);
       },
       (error) => {
         console.error('Error fetching products', error);
@@ -110,5 +123,31 @@ export class ProductListComponent implements OnInit {
         this.snackBar.open('Invalid price entered', 'Close', { duration: 3000 });
       }
     }
+  }
+
+  openDiscountDialog(product: Product): void {
+    const dialogRef = this.dialog.open(DiscountDialogComponent, {
+      width: '400px',
+      data: { currentDiscount: product.discount }
+    });
+
+    dialogRef.afterClosed().subscribe(selectedDiscounts => {
+      if (selectedDiscounts) {
+        this.setDiscount(product, selectedDiscounts[0]); // Assuming one discount is selected for simplicity
+      }
+    });
+  }
+
+  setDiscount(product: Product, discount: string): void {
+    this.productService.updateDiscount(product.name, discount === 'No Discount' ? null : discount).subscribe(
+      () => {
+        this.snackBar.open('Discount updated successfully', 'Close', { duration: 3000 });
+        product.discount = discount; // Update local model to reflect change
+      },
+      (error) => {
+        console.error('Error updating discount', error);
+        this.snackBar.open('Error updating discount', 'Close', { duration: 3000 });
+      }
+    );
   }
 }

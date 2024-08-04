@@ -39,7 +39,10 @@
             <mat-icon>edit</mat-icon>
             <span>Change Price</span>
           </button>
-          <!-- Add more menu items here if needed -->
+          <button mat-menu-item (click)="openDiscountDialog(product)">
+            <mat-icon>local_offer</mat-icon>
+            <span>Set Discount</span>
+          </button>
         </mat-menu>
       </td>
     </ng-container>

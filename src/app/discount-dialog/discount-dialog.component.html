@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Select Discounts</h2>
+<mat-dialog-content>
+  <mat-selection-list [(ngModel)]="selectedDiscounts">
+    <mat-list-option *ngFor="let discount of availableDiscounts" [value]="discount">
+      {{ discount }}
+    </mat-list-option>
+  </mat-selection-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Save</button>
+</mat-dialog-actions>

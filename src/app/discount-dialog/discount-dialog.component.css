@@ -1,0 +1,12 @@
+mat-dialog-content {
+  max-height: 300px; /* Limit the height for better usability */
+  overflow: auto;
+}
+
+mat-selection-list {
+  width: 100%;
+}
+
+mat-dialog-actions {
+  justify-content: flex-end;
+}

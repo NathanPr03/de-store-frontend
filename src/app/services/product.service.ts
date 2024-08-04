@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {map, Observable, of} from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
 
 export interface Product {
   id: number;
@@ -9,13 +10,14 @@ export interface Product {
   price: number;
   discount: string;
   remaining_stock: number;
+  showDiscountDropdown: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://price-control-my0drfxlm-nathans-projects-3241c1c3.vercel.app/api/';
+  private apiUrl = 'https://price-control-di9ejty2y-nathans-projects-3241c1c3.vercel.app/api/';
 
   constructor(private http: HttpClient) {}
 
@@ -35,6 +37,17 @@ export class ProductService {
     console.log("Body is: " + JSON.stringify(body));
     return this.http.post(url, JSON.stringify(body), this.httpOptions).pipe(
       catchError(this.handleError<any>('updateProduct'))
+    );
+  }
+
+  updateDiscount(productName: string, discount: string | null): Observable<any> {
+    const url = `${this.apiUrl}productDiscount`;
+    const body = {
+      productName: productName,
+      discountType: discount,
+    }
+    return this.http.post(url, body, this.httpOptions).pipe(
+      catchError(this.handleError<any>('updateDiscount'))
     );
   }
 
