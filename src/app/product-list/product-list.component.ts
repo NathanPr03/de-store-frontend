@@ -22,6 +22,8 @@ import {MatCard} from "@angular/material/card";
 import {MatSelect} from "@angular/material/select";
 import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
 import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.component";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {InventoryService} from "../services/inventory.service";
 
 @Component({
   imports: [
@@ -73,7 +75,9 @@ import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.compon
     MatButton,
     MatButton,
     MatDialogClose,
-    DiscountDialogComponent
+    DiscountDialogComponent,
+    MatTabGroup,
+    MatTab,
   ],
   selector: 'app-product-list',
   standalone: true,
@@ -82,9 +86,9 @@ import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.compon
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  availableDiscounts: string[] = ['None', '3 for 2', 'Buy One Get One Free', 'Free Delivery'];
 
-  constructor(private productService: ProductService, private snackBar: MatSnackBar, private dialog: MatDialog) {}
+  lowStockProducts: Product[] = [];
+  constructor(private productService: ProductService, private snackBar: MatSnackBar, private dialog: MatDialog, private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
     this.fetchProducts();
@@ -100,6 +104,20 @@ export class ProductListComponent implements OnInit {
       (error) => {
         console.error('Error fetching products', error);
         this.snackBar.open('Error fetching products', 'Close', { duration: 3000 });
+      }
+    );
+  }
+
+  fetchLowStockProducts(): void {
+    console.log("FETCHING")
+    this.inventoryService.getLowStockItems().subscribe(
+      (data: Product[]) => {
+        this.lowStockProducts = data;
+        console.log('Fetched low stock products:', this.lowStockProducts);
+      },
+      (error) => {
+        console.error('Error fetching low stock items', error);
+        this.snackBar.open('Error fetching low stock items', 'Close', { duration: 3000 });
       }
     );
   }

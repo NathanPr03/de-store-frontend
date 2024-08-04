@@ -9,7 +9,7 @@ export interface Product {
   name: string;
   price: number;
   discount: string;
-  remaining_stock: number;
+  remainingStock: number;
   showDiscountDropdown: boolean;
 }
 

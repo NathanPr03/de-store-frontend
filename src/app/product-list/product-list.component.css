@@ -14,3 +14,12 @@ button {
   margin-top: 10px;
 }
 
+.mat-tab-group {
+  margin-bottom: 20px;
+}
+
+.mat-elevation-z8 {
+  margin-top: 20px;
+  overflow: auto;
+}
+
