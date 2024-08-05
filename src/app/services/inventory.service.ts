@@ -8,7 +8,7 @@ import {Product} from "./product.service";
   providedIn: 'root'
 })
 export class InventoryService {
-  private inventoryUrl = 'https://inventory-control-oxb6guc4z-nathans-projects-3241c1c3.vercel.app/api/'; // Replace with your actual inventory endpoint
+  private inventoryUrl = 'https://inventory-control-craaan9aw-nathans-projects-3241c1c3.vercel.app/api/';
 
   constructor(private http: HttpClient) {}
 
@@ -22,9 +22,12 @@ export class InventoryService {
     );
   }
 
-  updateInventory(product: Product): Observable<any> {
-    const url = `${this.inventoryUrl}/${product.id}`;
-    return this.http.put(url, product, this.httpOptions).pipe(
+  updateInventory(product: Product, additionalStock: number): Observable<any> {
+    const url = `${this.inventoryUrl}changeStock?productName=${product.name}`;
+    const body = {
+      newStock: product.remainingStock + additionalStock
+    }
+    return this.http.post(url, body, this.httpOptions).pipe(
       catchError(this.handleError<any>('updateInventory'))
     );
   }

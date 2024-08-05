@@ -24,6 +24,7 @@ import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialog
 import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.component";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {InventoryService} from "../services/inventory.service";
+import {OrderDialogComponent} from "../order-dialog/order-dialog.component";
 
 @Component({
   imports: [
@@ -78,6 +79,7 @@ import {InventoryService} from "../services/inventory.service";
     DiscountDialogComponent,
     MatTabGroup,
     MatTab,
+    OrderDialogComponent
   ],
   selector: 'app-product-list',
   standalone: true,
@@ -92,6 +94,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.fetchLowStockProducts();
   }
 
   fetchProducts(): void {
@@ -167,5 +170,27 @@ export class ProductListComponent implements OnInit {
         this.snackBar.open('Error updating discount', 'Close', { duration: 3000 });
       }
     );
+  }
+
+  orderMore(product: Product): void {
+    const dialogRef = this.dialog.open(OrderDialogComponent, {
+      width: '300px',
+      data: { productName: product.name }
+    });
+
+    dialogRef.afterClosed().subscribe(quantity => {
+      if (quantity) {
+        this.inventoryService.updateInventory(product, quantity).subscribe(
+          (response) => {
+            this.snackBar.open(`Ordered ${quantity} more of ${product.name}`, 'Close', { duration: 3000 });
+            console.log('Order response:', response);
+          },
+          (error) => {
+            console.error('Error ordering more stock', error);
+            this.snackBar.open('Error ordering more stock', 'Close', { duration: 3000 });
+          }
+        );
+      }
+    })
   }
 }

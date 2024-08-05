@@ -1,4 +1,21 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+  font-family: Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.sidenav-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+mat-sidenav {
+  background-color: #f5f5f5; /* Light background for sidenav */
+}
+
+mat-sidenav-content {
+  background-color: #fff; /* White background for content area */
+  padding: 16px;
+}
