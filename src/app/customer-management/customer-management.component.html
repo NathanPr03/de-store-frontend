@@ -1,0 +1,54 @@
+<mat-card class="customer-card">
+  <h2>Customer Management</h2>
+  <table mat-table [dataSource]="customers" class="mat-elevation-z8">
+    <!-- ID Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let customer"> {{ customer.id }} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let customer"> {{ customer.email }} </td>
+    </ng-container>
+
+    <!-- Loyalty Card Column -->
+    <ng-container matColumnDef="has_loyalty_card">
+      <th mat-header-cell *matHeaderCellDef> Loyalty Card </th>
+      <td mat-cell *matCellDef="let customer">
+        {{ customer.has_loyalty_card ? 'Yes' : 'No' }}
+      </td>
+    </ng-container>
+
+    <!-- Favorite Item Column -->
+    <ng-container matColumnDef="favorite_item">
+      <th mat-header-cell *matHeaderCellDef> Favorite Item </th>
+      <td mat-cell *matCellDef="let customer"> {{ customer.favorite_item }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let customer">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="toggleLoyaltyCard(customer)">
+            <mat-icon>{{ customer.has_loyalty_card ? 'loyalty' : 'loyalty_outlined' }}</mat-icon>
+            <span>{{ customer.has_loyalty_card ? 'Remove Loyalty Card' : 'Set Loyalty Card' }}</span>
+          </button>
+          <button mat-menu-item (click)="checkFinancialApproval(customer)">
+            <mat-icon>verified_user</mat-icon>
+            <span>Check Financial Approval</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <!-- Table headers and rows -->
+    <tr mat-header-row *matHeaderRowDef="['id', 'email', 'has_loyalty_card', 'favorite_item', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id', 'email', 'has_loyalty_card', 'favorite_item', 'actions']"></tr>
+  </table>
+</mat-card>

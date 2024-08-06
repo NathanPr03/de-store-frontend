@@ -1,0 +1,18 @@
+.approved {
+  color: green;
+  font-weight: bold;
+}
+
+.not-approved {
+  color: red;
+  font-weight: bold;
+}
+
+mat-dialog-content {
+  padding: 16px;
+  text-align: center;
+}
+
+mat-dialog-actions {
+  margin-top: 16px;
+}

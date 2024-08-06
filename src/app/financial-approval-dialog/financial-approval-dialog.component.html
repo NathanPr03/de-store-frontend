@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Financial Approval Status</h2>
+<mat-dialog-content>
+  <p>
+    Customer <strong>{{ data.email }}</strong> is
+    <span [ngClass]="{'approved': data.isApproved, 'not-approved': !data.isApproved}">
+      {{ data.isApproved ? 'financially approved' : 'not financially approved' }}.
+    </span>
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+</mat-dialog-actions>
