@@ -25,6 +25,7 @@ import {DiscountDialogComponent} from "../discount-dialog/discount-dialog.compon
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {InventoryService} from "../services/inventory.service";
 import {OrderDialogComponent} from "../order-dialog/order-dialog.component";
+import {AddProductDialogComponent} from "../add-product-dialog/add-product-dialog.component";
 
 @Component({
   imports: [
@@ -168,6 +169,31 @@ export class ProductListComponent implements OnInit {
       (error) => {
         console.error('Error updating discount', error);
         this.snackBar.open('Error updating discount', 'Close', { duration: 3000 });
+      }
+    );
+  }
+
+  openAddProductDialog(): void {
+    const dialogRef = this.dialog.open(AddProductDialogComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.addProduct(result);
+      }
+    });
+  }
+
+  addProduct(productData: Product): void {
+    this.productService.addProduct(productData).subscribe(
+      () => {
+        this.snackBar.open('Product added successfully', 'Close', { duration: 3000 });
+        this.fetchProducts(); // Refresh the product list
+      },
+      (error) => {
+        console.error('Error adding product', error);
+        this.snackBar.open('Error adding product', 'Close', { duration: 3000 });
       }
     );
   }

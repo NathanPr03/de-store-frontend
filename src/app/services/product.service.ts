@@ -17,7 +17,7 @@ export interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://price-control-di9ejty2y-nathans-projects-3241c1c3.vercel.app/api/';
+  private apiUrl = 'https://price-control-9zyxjur4x-nathans-projects-3241c1c3.vercel.app/api/';
 
   constructor(private http: HttpClient) {}
 
@@ -38,6 +38,13 @@ export class ProductService {
     return this.http.post(url, JSON.stringify(body), this.httpOptions).pipe(
       catchError(this.handleError<any>('updateProduct'))
     );
+  }
+
+  addProduct(product: Product): Observable<any> {
+    const url = `${this.apiUrl}product`;
+    return this.http.post(url, JSON.stringify(product), this.httpOptions).pipe(
+      catchError(this.handleError<any>('addProduct'))
+    )
   }
 
   updateDiscount(productName: string, discount: string | null): Observable<any> {
