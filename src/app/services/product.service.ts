@@ -17,7 +17,7 @@ export interface Product {
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'https://price-control-9zyxjur4x-nathans-projects-3241c1c3.vercel.app/api/';
+  private apiUrl = 'https://price-control-5btbdkja9-nathans-projects-3241c1c3.vercel.app/api/';
 
   constructor(private http: HttpClient) {}
 

@@ -8,7 +8,7 @@ import {Product} from "./product.service";
   providedIn: 'root'
 })
 export class InventoryService {
-  private inventoryUrl = 'https://inventory-control-craaan9aw-nathans-projects-3241c1c3.vercel.app/api/';
+  private inventoryUrl = 'https://inventory-control-kj8bev3qc-nathans-projects-3241c1c3.vercel.app/api/';
 
   constructor(private http: HttpClient) {}
 
