@@ -39,8 +39,7 @@ export class AddProductDialogComponent {
     this.addProductForm = this.fb.group({
       name: ['', Validators.required],
       price: ['', [Validators.required, Validators.min(0)]],
-      stock: ['', [Validators.required, Validators.min(0)]],
-      description: ['']
+      remaining_stock: ['', [Validators.required, Validators.min(0)]]
     });
   }
 
