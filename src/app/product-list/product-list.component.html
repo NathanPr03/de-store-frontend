@@ -1,6 +1,11 @@
 <mat-card>
   <div style="display: flex; justify-content: space-between; align-items: center;">
     <h2>Product Management</h2>
+    <div>
+      <mat-slide-toggle (change)="toggleDiscountFilter($event.checked)">
+        Show Only Discounted Products
+      </mat-slide-toggle>
+    </div>
     <button mat-raised-button color="primary" (click)="openAddProductDialog()">
       Add Product
     </button>
@@ -10,7 +15,7 @@
   <mat-tab-group>
     <!-- Tab for All Products -->
     <mat-tab label="All Products">
-      <table mat-table [dataSource]="products" class="mat-elevation-z8" matSort>
+      <table mat-table [dataSource]="discountedProducts" class="mat-elevation-z8" matSort>
         <!-- Product Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Product Name </th>

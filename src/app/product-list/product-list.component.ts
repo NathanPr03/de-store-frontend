@@ -26,6 +26,7 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {InventoryService} from "../services/inventory.service";
 import {OrderDialogComponent} from "../order-dialog/order-dialog.component";
 import {AddProductDialogComponent} from "../add-product-dialog/add-product-dialog.component";
+import {MatSlideToggle} from "@angular/material/slide-toggle";
 
 @Component({
   imports: [
@@ -80,7 +81,8 @@ import {AddProductDialogComponent} from "../add-product-dialog/add-product-dialo
     DiscountDialogComponent,
     MatTabGroup,
     MatTab,
-    OrderDialogComponent
+    OrderDialogComponent,
+    MatSlideToggle
   ],
   selector: 'app-product-list',
   standalone: true,
@@ -89,8 +91,10 @@ import {AddProductDialogComponent} from "../add-product-dialog/add-product-dialo
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-
+  discountedProducts: Product[] = [];
   lowStockProducts: Product[] = [];
+  showOnlyDiscounted = false;
+
   constructor(private productService: ProductService, private snackBar: MatSnackBar, private dialog: MatDialog, private inventoryService: InventoryService) {}
 
   ngOnInit(): void {
@@ -101,8 +105,8 @@ export class ProductListComponent implements OnInit {
   fetchProducts(): void {
     this.productService.getProducts().subscribe(
       (data: Product[]) => {
-        // Initialize showDiscountDropdown for each product
         this.products = data.map(product => ({ ...product, showDiscountDropdown: false }));
+        this.discountedProducts = this.products;
         console.log('Fetched products:', this.products);
       },
       (error) => {
@@ -197,6 +201,20 @@ export class ProductListComponent implements OnInit {
       }
     );
   }
+
+  toggleDiscountFilter(showOnlyDiscounted: boolean): void {
+    this.showOnlyDiscounted = showOnlyDiscounted;
+    this.applyFilter();
+  }
+
+  applyFilter(): void {
+    if (this.showOnlyDiscounted) {
+      this.discountedProducts = this.products.filter(product => product.discount && product.discount !== 'No Discount');
+    } else {
+      this.discountedProducts = [...this.products];
+    }
+  }
+
 
   orderMore(product: Product): void {
     const dialogRef = this.dialog.open(OrderDialogComponent, {
